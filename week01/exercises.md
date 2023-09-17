@@ -6,8 +6,8 @@ A group is a set of numbers that respect differents axioms, defined on a single 
 The axioms (under the group operation) are:
 -  **Is closed**: $A \cdot B \in G$
 - **Is associative**: $A \cdot B = B \cdot A$
-- **Has an identity**: $ A * e = A$
-- **Has a multiplicative inverse**: $ A * A^{-1} = e $
+- **Has an identity**: $A * e = A$
+- **Has a multiplicative inverse**: $A * A^{-1} = e$
 
 ### Subgroups
 A group $S$ is a subgroup of $G$ if it's a subset of $G$ (all elements of $S$ $\in$ $G$) and that both groups are defined on the same binary operation.
