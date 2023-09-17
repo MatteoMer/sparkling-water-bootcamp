@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+base64 = "0.21.4"
 num-bigint = "0.4.4"
 num-integer = "0.1.45"
+num-prime = "0.4.3"
 num-traits = "0.2.16"
+rand = "0.8.5"
 

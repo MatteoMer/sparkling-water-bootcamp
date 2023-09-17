@@ -24,17 +24,16 @@ fn main() {
     match mode.as_str() {
         "encrypt" => {
             let m = args.get(2).unwrap();
-            let n = args.get(3).unwrap();
-            encrypt(m, default_e, n);
+            let public_key = args.get(3).unwrap();
+            encrypt(m, public_key);
         }
         "decrypt" => {
-            let d = args.get(2).unwrap();
-            let c = args.get(3).unwrap();
-            let n = args.get(4).unwrap();
-            decrypt(d, c, n);
+            let c = args.get(2).unwrap();
+            let private_key = args.get(3).unwrap();
+            decrypt(private_key, c);
         }
         "generate" => {
-            generate(default_e);
+            generate(default_e, 32); // You can change the number of bytes of the RSA here
         }
         _ => {
             println!("Invalid mode. Use 'encrypt', 'decrypt', or 'generate'.");

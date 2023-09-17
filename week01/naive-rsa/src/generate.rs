@@ -1,30 +1,48 @@
+use crate::utils::modinv;
+extern crate rand;
 
+use base64::{Engine as _, engine::general_purpose};
 use std::ops::Mul;
 use num_bigint::BigInt;
+use crate::utils::is_prime;
+use rand::RngCore;
 
-use crate::utils::modinv;
 
+fn generate_random_large_prime(num_bytes: u32) -> BigInt {
+    let mut random_bigint: BigInt;
 
-pub fn generate(e: u64) {
+    loop {
+        let mut rng = rand::thread_rng();
+        let mut bytes = vec![0u8; num_bytes.try_into().unwrap()];
+        rng.fill_bytes(&mut bytes);
+
+        random_bigint = BigInt::from_bytes_be(num_bigint::Sign::Plus, &bytes);
+        if random_bigint.clone() % BigInt::from(2) == BigInt::from(0) {continue}
+        if is_prime(&random_bigint) {return random_bigint}
+    }
+
+}
+
+pub fn generate(e: u64, num_bytes: u32) {
+
     let e = BigInt::from(e);
 
     //p, q = 2 primes, p_1, q_1 = p-1, q-1
-    let p = BigInt::parse_bytes(b"84852413240602577954214777008087281843214016299350315794614634297287697200010764533593325786107542326132589753401598693679754757", 10).expect("Invalid number");
+    
+    let p = generate_random_large_prime(num_bytes);
     let p_1: BigInt = p.clone() - 1;
-    let q = BigInt::parse_bytes(b"50373217868900107291273550384286753462298309990020270133008801440870943881781196521322141014725275347548581897920583302199962017", 10).expect("Invalid number");
+    let q = generate_random_large_prime(num_bytes);
     let q_1: BigInt = q.clone() - 1;
 
     let n = p.mul(q);
-    println!("n: {}", n);
     let phi_n = p_1.mul(q_1);
 
-    let d = modinv(e, phi_n);
-    println!("d: {}", d);
+    let d = modinv(e.clone(), phi_n);
 
-//     // Convert the message bytes directly to a BigUint
-//     let m = BigUint::from_bytes_be(message.as_bytes());
+    let public_key = format!("{};{}",e, n);
+    let private_key = format!("{};{}",d, n);
 
-//     // Encryption
-//     let encrypted_message = m.modpow(&e, &n);
-//     println!("Your encrypted message is: {}", encrypted_message);
+    println!("Your public key is: {}", general_purpose::STANDARD_NO_PAD.encode(public_key));
+    println!("Your private key is: {}", general_purpose::STANDARD_NO_PAD.encode(private_key));
+
 }

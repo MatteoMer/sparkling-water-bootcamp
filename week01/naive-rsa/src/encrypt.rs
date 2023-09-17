@@ -1,22 +1,25 @@
 use num_bigint::BigUint;
+use base64::{Engine as _, engine::general_purpose};
 
-pub fn encrypt(message: &str, e: u64, n: &str) {
-    let e = BigUint::from(e);
+
+pub fn encrypt(message: &str, public_key: &str) {
+
+    let public_key = general_purpose::STANDARD_NO_PAD.decode(public_key).unwrap();
+
+    let public_key_str = std::str::from_utf8(&public_key).expect("Invalid UTF-8 sequence");
+
+    let mut keys = public_key_str.split(';');
+    let e = keys.next().unwrap_or_default();
+    let n = keys.next().unwrap_or_default();
+
+    let e = BigUint::parse_bytes(e.as_bytes(), 10).expect("Invalid number");
     let n = BigUint::parse_bytes(n.as_bytes(), 10).expect("Invalid number");
-    println!("n: {}", n);
 
 
     // Convert the message bytes directly to a BigUint
     let m = BigUint::from_bytes_be(message.as_bytes());
-    println!("m: {}", m);
-
-    let bytes = m.to_bytes_be();
-
-    let recovered_message = String::from_utf8(bytes).expect("Invalid UTF-8 sequence");
-    println!("{}", recovered_message);
 
     // Encryption
     let encrypted_message = m.modpow(&e, &n);
-    // println!("Your encrypted message is: {}", encrypted_message);
-    println!("c: {}", encrypted_message);
+    println!("Your encrypted message is: {}", encrypted_message);
 }
