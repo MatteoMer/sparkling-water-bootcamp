@@ -35,5 +35,6 @@ Ok so first let's try to find the generator of the $2^{32}$ roots of unity. I th
 
 
 # What are the applications of the Chinese Remainder Theorem in Cryptography?
+The Chinese Remainder Theorem allows to compute big integers efficiently, because it allows to do divide the computation in multiple smaller ones (smaller as smaller integers)
 
 # Find all the subgroups of the multiplicative group of $Z_{29}^\star$
