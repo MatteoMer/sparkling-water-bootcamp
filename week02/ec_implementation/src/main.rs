@@ -9,7 +9,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     
     if args.len() < 2 {
-        println!("Please specify a mode: add, double, or multiply.");
+        println!("Please specify a mode: add, or multiply.");
         return;
     }
     
@@ -59,9 +59,18 @@ fn main() {
             
         }
         "multiply" => {
+            let x1 = BigUint::from(5 as u32);
+            let y1 = BigUint::from(1 as u32);
+            let coordinates_x_1 = [x1, y1, BigUint::from(1 as u32)];
+            let point = EllipticCurveProjectivePoint::new(&curve, &coordinates_x_1);
+
+            let new_point = point.multiply(BigUint::from(70 as u32));
+
+            let coordinates = new_point.coordinates;
+            println!("x3:{},y3:{},z3:{}", coordinates[0], coordinates[1], coordinates[2]);
         }
         _ => {
-            println!("Invalid mode. Use 'add', 'double', or 'multiply'.");
+            println!("Invalid mode. Use 'add', or 'multiply'.");
         }
     }
 }

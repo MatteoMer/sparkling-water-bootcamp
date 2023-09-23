@@ -116,5 +116,22 @@ impl EllipticCurveProjectivePoint {
         return Self::new(&self.curve, &coordinates);
 
     }
+
+    //double and add algorithm: an introduction to mathematical cryptography: Chapter 5.3.1
+    pub fn multiply(&self, mut n: BigUint) -> Self {
+        let mut q = self.clone();
+        let mut r = self.neutral_element();
+
+        while n > BigUint::zero() {
+            if &n % BigUint::from(2 as u32) == BigUint::one() {
+                r = q.add(&r);
+            }
+            q = q.add(&q.clone());
+            n = &n / BigUint::from(2 as u32);
+            println!("{}",n);
+        }
+
+        return r;
+    }
 }
 
